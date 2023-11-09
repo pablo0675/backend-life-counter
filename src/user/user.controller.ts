@@ -1,0 +1,142 @@
+import {Body, Controller, Delete, Get, HttpException, Param, Post} from '@nestjs/common';
+import {UserService} from "./user.service";
+import {ApiBody, ApiOkResponse, ApiBadRequestResponse} from "@nestjs/swagger";
+import {CreateUserDto, CreateUserResponseDto} from "./dto/user.dto";
+import * as TE from "fp-ts/TaskEither";
+import {IUser} from "../models/user.model";
+import {TaskEither} from "fp-ts/lib/TaskEither";
+import {pipe} from "fp-ts/function/";
+
+@Controller('user')
+export class UserController {
+    constructor(
+        private readonly userService: UserService,
+    ) {
+    }
+
+    @ApiBody({
+        schema: {
+            type: 'object',
+            properties: {
+                email: {
+                    type: 'string',
+                },
+                userName: {
+                    type: 'string',
+                },
+                password: {
+                    type: 'string',
+                },
+            }
+        }
+    })
+
+    @ApiOkResponse({
+        description: 'success',
+        type: String,
+        status: 200,
+    })
+
+    @ApiBadRequestResponse({
+        description: 'bad request',
+        type: String,
+        status: 400,
+    })
+    @Post()
+    async createUser(@Body() userDto: CreateUserDto) {
+        const result: TaskEither<Error, IUser> = await this.userService.createUser(userDto)
+
+
+        return pipe(
+            result,
+            TE.match(
+                (error) => {
+                    throw new HttpException(error.message, 500);
+                },
+                (user) => {
+                    return user;
+                }
+            )
+        )();
+    }
+
+   @ApiBody({
+        schema: {
+            type: 'object',
+            properties: {
+                uid: {
+                    type: 'string',
+                }
+            }
+        }
+    })
+
+    @ApiOkResponse({
+        description: 'success',
+        type: CreateUserResponseDto,
+        status: 200,
+    })
+
+    @ApiBadRequestResponse({
+        description: 'bad request',
+        type: String,
+        status: 400,
+    })
+
+    @Get()
+    async getUser(@Param('uid') uid: string) {
+        const result = await this.userService.findUserById(uid)
+
+        return pipe(
+            result,
+            TE.match(
+                (error) => {
+                    throw new HttpException(error.message, 500);
+                },
+                (user) => {
+                    return user;
+                }
+            )
+        )();
+    }
+
+    @ApiBody({
+        schema: {
+            type: 'object',
+            properties: {
+                uid: {
+                    type: 'string',
+                }
+            }
+        }
+    })
+
+    @ApiOkResponse({
+        description: 'success',
+        type: String,
+        status: 200,
+    })
+
+    @ApiBadRequestResponse({
+        description: 'bad request',
+        type: String,
+        status: 400,
+    })
+
+    @Delete()
+    async deleteUser(@Param('uid') uid: string) {
+        const result = await this.userService.deleteUser(uid)
+
+        return pipe(
+            result,
+            TE.match(
+                (error) => {
+                    throw new HttpException(error.message, 500);
+                },
+                (user) => {
+                    return user;
+                }
+            )
+        )();
+    }
+}
