@@ -49,12 +49,11 @@ export class UserService {
     }
 
     async existsUserByEmail(email: string) : Promise<boolean> {
-        return (await this.findUserByEmail(email)) !== null;
+        const user = await this.userModel.findOne({email}).exec();
+        return !!user;
     }
-
-    findById(uid: string): TaskEither<Error, IUser> {
-        return pipe(
-            tryCatch(() => this.userModel.findById(uid).exec(), (reason) => new Error(String(reason)))
-        )
+    async existUsername(username: string) : Promise<boolean> {
+        const user = await this.userModel.findOne({username}).exec();
+        return !!user;
     }
 }

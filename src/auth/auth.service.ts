@@ -1,4 +1,4 @@
-import {Injectable, UnauthorizedException} from '@nestjs/common';
+import {Injectable} from '@nestjs/common';
 import {LoginDto, RegisterDto} from "./dto/loginRegister.dto";
 import {JwtService} from "@nestjs/jwt";
 import {UserService} from "../user/user.service";
@@ -20,8 +20,13 @@ export class AuthService
     }
 
     async login({ email, password }: LoginDto): Promise<TaskEither<Error, string>> {
+        const user = await this.userService.findUserByEmail(email);
+        const exists = await this.userService.existsUserByEmail(email);
+        if (!exists) {
+            return TE.left(new Error('User not found'));
+        }
         return pipe(
-            this.userService.findUserByEmail(email),
+            user,
             TE.chain((user) => {
                 return pipe(
                     tryCatch(() => verify(user.password, password), (reason) => new Error(String(reason))),
@@ -39,6 +44,13 @@ export class AuthService
     async register({ email, username, password }: RegisterDto) : Promise<TaskEither<Error, IUser>>
     {
         let cryptedpass = await hash(password);
+        let exists = await this.userService.existsUserByEmail(email);
+        if (exists)
+            return TE.left(new Error('mail already in use'));
+        exists = await this.userService.existUsername(username);
+        if (exists)
+            return TE.left(new Error('username already in use'));
+
         return pipe(
             this.userService.createUser({ email, username, password: cryptedpass } as CreateUserDto),
             TE.chain((user) => {
