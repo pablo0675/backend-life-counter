@@ -25,4 +25,10 @@ export class AppController {
       throw new Error('Error connecting to MongoDB');
     }
   }
+
+  @Get()
+    async getHello(): Promise<void> {
+        console.log('hello this is the backend of the app');
+        console.log('go see all the routes in the swagger documentation');
+    }
 }
