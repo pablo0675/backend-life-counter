@@ -27,8 +27,7 @@ export class AppController {
   }
 
   @Get()
-    async getHello(): Promise<void> {
-        console.log('hello this is the backend of the app');
-        console.log('go see all the routes in the swagger documentation');
+  async getHello(): Promise<string> {
+    return("hello this is the api of the life-counter  project");
     }
 }
