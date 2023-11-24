@@ -1,12 +1,13 @@
 import {Body, Controller, Delete, Get, HttpException, Param, Post} from '@nestjs/common';
 import {UserService} from "./user.service";
-import {ApiBody, ApiOkResponse, ApiBadRequestResponse} from "@nestjs/swagger";
+import {ApiBody, ApiOkResponse, ApiBadRequestResponse, ApiTags} from "@nestjs/swagger";
 import {CreateUserDto, CreateUserResponseDto} from "./dto/user.dto";
 import * as TE from "fp-ts/TaskEither";
 import {IUser} from "../models/user.model";
 import {TaskEither} from "fp-ts/lib/TaskEither";
 import {pipe} from "fp-ts/function/";
 
+@ApiTags('user')
 @Controller('user')
 export class UserController {
     constructor(

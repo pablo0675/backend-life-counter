@@ -6,12 +6,12 @@ import {ScheduleModule} from "@nestjs/schedule";
 import { MongooseModule } from '@nestjs/mongoose'
 import {JwtModule} from "@nestjs/jwt";
 import {PassportModule} from "@nestjs/passport";
-import { AuthController } from './auth/auth.controller';
-import { AuthService } from './auth/auth.service';
 import { AuthModule } from './auth/auth.module';
-import { UserService } from './user/user.service';
-import { UserController } from './user/user.controller';
 import { UserModule } from './user/user.module';
+import { ConfigurationController } from './configuration/configurationController';
+import { ConfigurationService } from './configuration/configuration.service';
+import { ConfigurationModule } from './configuration/configurationModule';
+import { CounterModule } from './counter/counter.module';
 
 @Module({
   imports: [
@@ -37,6 +37,8 @@ import { UserModule } from './user/user.module';
       }),
       AuthModule,
       UserModule,
+      ConfigurationModule,
+      CounterModule,
   ],
   controllers: [AppController],
   providers: [AppService],

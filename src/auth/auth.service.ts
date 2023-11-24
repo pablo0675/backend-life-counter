@@ -32,7 +32,7 @@ export class AuthService
                     tryCatch(() => verify(user.password, password), (reason) => new Error(String(reason))),
                     TE.chain(result =>
                         result
-                            ? TE.right(this.generateToken(user.uid))
+                            ? TE.right(this.generateToken(user.uid) + ' ' + user.uid)
                             : TE.left(new Error('Wrong password'))
                     )
                 )
