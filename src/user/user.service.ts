@@ -26,19 +26,19 @@ export class UserService {
 
     findUserById(uid: string): TaskEither<Error, IUser> {
         return pipe(
-            tryCatch(() => this.userModel.findById(uid).exec(), (reason) => new Error(String(reason)))
+            tryCatch(() => this.userModel.findOne({uid: uid}).exec(), (reason) => new Error(String(reason)))
         )
     }
 
     updateUser(uid: string, user: IUser): TaskEither<Error, IUser> {
         return pipe(
-            tryCatch(() => this.userModel.findByIdAndUpdate(uid, user).exec(), (reason) => new Error(String(reason)))
+            tryCatch(() => this.userModel.findOneAndUpdate({uid: uid}, user).exec(), (reason) => new Error(String(reason)))
         )
     }
 
     deleteUser(uid: string): TaskEither<Error, IUser> {
         return pipe(
-            tryCatch(() => this.userModel.findByIdAndDelete(uid).exec(), (reason) => new Error(String(reason)))
+            tryCatch(() => this.userModel.findOneAndDelete({uid: uid}).exec(), (reason) => new Error(String(reason)))
         )
     }
 

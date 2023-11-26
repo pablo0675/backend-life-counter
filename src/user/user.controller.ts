@@ -1,4 +1,4 @@
-import {Body, Controller, Delete, Get, HttpException, Param, Post} from '@nestjs/common';
+import {Body, Controller, Delete, Get, HttpException, Param, Post, Query} from '@nestjs/common';
 import {UserService} from "./user.service";
 import {ApiBody, ApiOkResponse, ApiBadRequestResponse, ApiTags} from "@nestjs/swagger";
 import {CreateUserDto, CreateUserResponseDto} from "./dto/user.dto";
@@ -84,9 +84,15 @@ export class UserController {
         status: 400,
     })
 
-    @Get()
-    async getUser(@Param('uid') uid: string) {
+    @Get('getUser')
+    async getUser(@Query('uid') uid: string) {
         const result = await this.userService.findUserById(uid)
+        const returnclass = {
+            uid: "",
+            email: "",
+            username: "",
+            picture: "",
+        }
 
         return pipe(
             result,
@@ -95,7 +101,11 @@ export class UserController {
                     throw new HttpException(error.message, 500);
                 },
                 (user) => {
-                    return user;
+                    returnclass.uid = user.uid;
+                    returnclass.email = user.email;
+                    returnclass.username = user.username;
+                    returnclass.picture = user.picture;
+                    return (returnclass);
                 }
             )
         )();
