@@ -8,6 +8,7 @@ export class counter {
     baseValue?: number;
     maxValue?: number;
     minValue?: number;
+    user_id?: string;
 }
 
 export const counterSchema = new Schema<counter>({
@@ -18,6 +19,7 @@ export const counterSchema = new Schema<counter>({
     baseValue: { type: Number, required: false },
     maxValue: { type: Number, required: false },
     minValue: { type: Number, required: false },
+    user_id: { type: String, required: false },
 });
 
 export const counterModel = model<counter>('Counter', counterSchema);
