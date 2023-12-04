@@ -16,10 +16,9 @@ export class AuthController {
     }
 
     @Post('login')
-    async login(@Body() { email, password }: LoginDto) : Promise<string[] | void> {
+    async login(@Body() { email, password }: LoginDto) : Promise<any | void> {
         {
             const result = await (await this.authService.login({email, password}))();
-            const returnValue: string[] = [];
             return pipe(
                 result,
                 fold(
@@ -27,9 +26,10 @@ export class AuthController {
                         throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
                     },
                     (tokenAndId) => {
-                        returnValue.push(tokenAndId.split(' ')[0]);
-                        returnValue.push(tokenAndId.split(' ')[1]);
-                        return returnValue;
+                        return {
+                            token: tokenAndId.split(' ')[0],
+                            id: tokenAndId.split(' ')[1],
+                        };
                     }
                 )
             );
