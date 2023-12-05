@@ -1,4 +1,4 @@
-import {Controller, Delete, Get, Param, Post} from '@nestjs/common';
+import {Body, Controller, Delete, Get, Param, Post, Query} from '@nestjs/common';
 import {ApiBody, ApiTags} from "@nestjs/swagger";
 
 import { ConfigurationService } from './configuration.service';
@@ -12,42 +12,42 @@ export class ConfigurationController {
     @ApiBody({description: 'Get configuration', type: configuration})
     @Get('get_configuration')
     async getConfiguration(
-        @Param() token: string,
-        @Param() configuration_id: string,
+        @Query() token: string,
+        @Query() configuration_id: string,
     ) : Promise<configuration> {
-        return await this.configurationService.getConfiguration(token, configuration_id);
+        return await this.configurationService.getConfiguration(token.toString(), configuration_id.toString());
     }
 
     @Get('get_all_configurations')
     async getAllConfigurations(
-        @Param() token: string,
-        @Param() user_id: string,
+        @Query() token: string,
+        @Query() user_id: string,
     ) : Promise<configuration[]> {
-        return await this.configurationService.getAllConfigurations(token, user_id);
+        return await this.configurationService.getAllConfigurations(token.toString(), user_id.toString());
     }
 
     @Delete('delete_configuration')
     async deleteConfiguration(
-        @Param() token: string,
-        @Param() configuration_id: string,
+        @Query() token: string,
+        @Query() configuration_id: string,
     ) : Promise<void> {
-        return await this.configurationService.deleteConfiguration(token, configuration_id);
+        return await this.configurationService.deleteConfiguration(token.toString(), configuration_id.toString());
     }
 
     @Post('create_configuration')
     async createConfiguration(
-        @Param() token: string,
-        @Param() configuration_id: string,
-        @Param() configuration: configuration,
+        @Body() token: string,
+        @Body() configuration_id: string,
+        @Body() configuration: configuration,
     ) : Promise<configuration> {
         return await this.configurationService.createConfiguration(token, configuration_id, configuration);
     }
 
     @Post('update_configuration')
     async updateConfiguration(
-        @Param() token: string,
-        @Param() configuration_id: string,
-        @Param() configuration: configuration,
+        @Body() token: string,
+        @Body() configuration_id: string,
+        @Body() configuration: configuration,
     ) : Promise<configuration> {
         return await this.configurationService.updateConfiguration(token, configuration_id, configuration);
     }

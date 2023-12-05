@@ -13,7 +13,7 @@ export class CounterService {
 
     async getCounter( counter_id: string) : Promise<counter>
     {
-        const counter = await this.counterModel.findOne({counter_id: counter_id}).exec();
+        const counter = await this.counterModel.findOne({counter_id: counter_id.toString()}).exec();
         if (!counter) {
             throw new Error('Counter not found');
         }
@@ -22,22 +22,22 @@ export class CounterService {
 
     async getAllCounters( user_id: string) : Promise<counter[]>
     {
-        return await this.counterModel.find({$or: [{user_id: user_id}, {user_id: "admin"}]}).exec();
+        return await this.counterModel.find({$or: [{user_id: user_id.toString()}, {user_id: "admin"}]}).exec();
     }
 
     async deleteCounter( counter_id: string) : Promise<void>
     {
-        const counter = await this.counterModel.findOne({counter_id: counter_id}).exec();
+        const counter = await this.counterModel.findOne({counter_id: counter_id.toString()}).exec();
         if (!counter) {
             throw new Error('Counter not found');
         }
-        await this.counterModel.deleteOne({counter_id: counter_id}).exec();
+        await this.counterModel.deleteOne({counter_id: counter_id.toString()}).exec();
     }
 
     async createCounter( counter_id: string, counter: counter, user_id: string) : Promise<counter>
     {
         const newCounter = new this.counterModel(counter);
-        newCounter.user_id = user_id;
+        newCounter.user_id = user_id.toString();
         return await newCounter.save();
     }
 

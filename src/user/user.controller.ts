@@ -135,8 +135,8 @@ export class UserController {
     })
 
     @Delete()
-    async deleteUser(@Param('uid') uid: string) {
-        const result = await this.userService.deleteUser(uid)
+    async deleteUser(@Query('uid') uid: string) {
+        const result = await this.userService.deleteUser(uid.toString())
 
         return pipe(
             result,

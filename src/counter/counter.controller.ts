@@ -1,4 +1,4 @@
-import {Body, Controller, Delete, Get, Param, Post} from '@nestjs/common';
+import {Body, Controller, Delete, Get, Param, Post, Query} from '@nestjs/common';
 import {ApiBody, ApiOkResponse, ApiTags} from "@nestjs/swagger";
 import {CounterService} from "./counter.service";
 import {counter} from "../models/counters.model";
@@ -19,7 +19,7 @@ export class CounterController {
 
     @Get('get_counter')
     async getCounter(
-        @Param() counter_id: string,
+        @Query() counter_id: string,
     ) : Promise<counter> {
         return await this.counterService.getCounter(counter_id);
     }
@@ -32,8 +32,9 @@ export class CounterController {
     @ApiBody({description: 'user_id', type: String})
     @Get('get_all_counters')
     async getAllCounters(
-        @Param() user_id: string,
+        @Query() user_id: string,
     ) : Promise<counter[]> {
+        console.log(user_id);
         return await this.counterService.getAllCounters(user_id);
     }
 
@@ -47,7 +48,7 @@ export class CounterController {
 
     @Delete('delete_counter')
     async deleteCounter(
-        @Param() counter_id: string,
+        @Query() counter_id: string,
     ) : Promise<void> {
         return await this.counterService.deleteCounter(counter_id);
     }
