@@ -1,7 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import {Injectable} from '@nestjs/common';
 import {counter} from "../models/counters.model";
 import {InjectModel} from "@nestjs/mongoose";
 import {Model} from "mongoose";
+import {v4 as uuidv4} from 'uuid';
+
 
 @Injectable()
 export class CounterService {
@@ -34,8 +36,9 @@ export class CounterService {
         await this.counterModel.deleteOne({counter_id: counter_id.toString()}).exec();
     }
 
-    async createCounter( counter_id: string, counter: counter, user_id: string) : Promise<counter>
+    async createCounter( counter: counter, user_id: string) : Promise<counter>
     {
+        counter.id = uuidv4();
         const newCounter = new this.counterModel(counter);
         newCounter.user_id = user_id.toString();
         return await newCounter.save();

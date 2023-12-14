@@ -63,9 +63,6 @@ export class CounterController {
         schema: {
             type: 'object',
             properties: {
-                counter_id: {
-                    type: 'string',
-                },
                 counter: {
                     type: 'object',
                     properties: {
@@ -104,11 +101,10 @@ export class CounterController {
 
     @Post('create_counter')
     async createCounter(
-        @Body() counter_id: string,
         @Body() counter: counter,
         @Body() user_id: string,
     ) : Promise<counter> {
-        return await this.counterService.createCounter(counter_id, counter, user_id);
+        return await this.counterService.createCounter(counter, user_id);
     }
 
     @ApiOkResponse({
