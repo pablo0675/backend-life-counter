@@ -40,7 +40,7 @@ export class CounterService {
     {
         counter.id = uuidv4();
         const newCounter = new this.counterModel(counter);
-        console.log(counter);
+        console.log(newCounter);
         newCounter.user_id = user_id.toString();
         return await newCounter.save();
     }
