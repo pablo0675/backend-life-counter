@@ -39,8 +39,8 @@ export class CounterService {
     async createCounter( counter: counter, user_id: string) : Promise<counter>
     {
         counter.id = uuidv4();
-        console.log(counter);
         const newCounter = new this.counterModel(counter);
+        console.log(counter);
         newCounter.user_id = user_id.toString();
         return await newCounter.save();
     }
