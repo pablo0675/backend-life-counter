@@ -150,4 +150,9 @@ export class UserController {
             )
         )();
     }
+
+    @Get('isUserAdmin')
+    async isUserAdmin(@Query('uid') uid: string) {
+        return await this.userService.isUserAdmin(uid);
+    }
 }

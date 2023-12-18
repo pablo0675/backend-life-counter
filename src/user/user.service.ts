@@ -18,7 +18,7 @@ export class UserService {
         return pipe(
             tryCatch(() => {
                 const uid = uuidv4();
-                const createdUser = new this.userModel({...user, uid});
+                const createdUser = new this.userModel({...user, uid, is_admin: false});
                 return createdUser.save();
             }, (reason) => new Error(String(reason)))
         )
@@ -55,5 +55,10 @@ export class UserService {
     async existUsername(username: string) : Promise<boolean> {
         const user = await this.userModel.findOne({username}).exec();
         return !!user;
+    }
+
+    async isUserAdmin(uid: string) : Promise<boolean> {
+        const user = await this.userModel.findOne({uid}).exec();
+        return user.is_admin;
     }
 }
