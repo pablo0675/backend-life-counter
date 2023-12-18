@@ -11,43 +11,32 @@ export class ConfigurationController {
 
     @Get('get_configuration')
     async getConfiguration(
-        @Query() token: string,
-        @Query() configuration_id: string,
+        @Query() query:{token: string, configuration_id: string}
     ) : Promise<configuration> {
-        return await this.configurationService.getConfiguration(token.toString(), configuration_id.toString());
+        return await this.configurationService.getConfiguration(query.token.toString(), query.configuration_id.toString());
     }
 
     @Get('get_all_configurations')
-    async getAllConfigurations(
-        @Query() token: string,
-        @Query() user_id: string,
+    async getAllConfigurations(@Query() query:{token: string, user_id: string}
     ) : Promise<configuration[]> {
-        return await this.configurationService.getAllConfigurations(token.toString(), user_id.toString());
+        return await this.configurationService.getAllConfigurations(query.token.toString(), query.user_id.toString());
     }
 
     @Delete('delete_configuration')
-    async deleteConfiguration(
-        @Query() token: string,
-        @Query() configuration_id: string,
+    async deleteConfiguration( @Query() query:{token: string, configuration_id: string}
     ) : Promise<void> {
-        return await this.configurationService.deleteConfiguration(token.toString(), configuration_id.toString());
+        return await this.configurationService.deleteConfiguration(query.token.toString(), query.configuration_id.toString());
     }
 
     @Post('create_configuration')
-    async createConfiguration(
-        @Body() token: string,
-        @Body() configuration_id: string,
-        @Body() configuration: configuration,
+    async createConfiguration( @Body () body:{token: string, configuration_id: string, configuration: configuration}
     ) : Promise<configuration> {
-        return await this.configurationService.createConfiguration(token, configuration_id, configuration);
+        return await this.configurationService.createConfiguration(body.token, body.configuration_id, body.configuration);
     }
 
     @Post('update_configuration')
-    async updateConfiguration(
-        @Body() token: string,
-        @Body() configuration_id: string,
-        @Body() configuration: configuration,
+    async updateConfiguration( @Body () body:{token: string, configuration_id: string, configuration: configuration}
     ) : Promise<configuration> {
-        return await this.configurationService.updateConfiguration(token, configuration_id, configuration);
+        return await this.configurationService.updateConfiguration(body.token, body.configuration_id, body.configuration);
     }
 }
