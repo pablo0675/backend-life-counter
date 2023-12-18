@@ -1,5 +1,5 @@
 import {model, Schema} from "mongoose";
-import {counter} from "./counters.model";
+import {ICounter} from "./counters.model";
 
 class color {
     r: number;
@@ -14,12 +14,12 @@ class player {
     picture?: string;
 }
 
-export class configuration {
-    id!: string;
-    name!: string;
-    user_id!: string;
+export interface configuration {
+    id: string;
+    name: string;
+    user_id: string;
     players: player[];
-    counters: counter[];
+    counters: ICounter[];
 }
 
 export const configurationSchema = new Schema<configuration>({

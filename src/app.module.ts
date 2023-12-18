@@ -8,8 +8,6 @@ import {JwtModule} from "@nestjs/jwt";
 import {PassportModule} from "@nestjs/passport";
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
-import { ConfigurationController } from './configuration/configurationController';
-import { ConfigurationService } from './configuration/configuration.service';
 import { ConfigurationModule } from './configuration/configurationModule';
 import { CounterModule } from './counter/counter.module';
 

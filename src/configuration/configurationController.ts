@@ -9,7 +9,6 @@ import {configuration} from "../models/configurationModel";
 export class ConfigurationController {
     constructor(private readonly configurationService: ConfigurationService) {}
 
-    @ApiBody({description: 'Get configuration', type: configuration})
     @Get('get_configuration')
     async getConfiguration(
         @Query() token: string,

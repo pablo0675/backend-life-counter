@@ -1,26 +1,37 @@
-import {model, Schema} from "mongoose";
+import mongoose, {model, Schema} from "mongoose";
 
-export class counter {
-    id!: string;
-    name!: string;
-    logo?: string;
-    description?: string;
-    baseValue?: number;
-    maxValue?: number;
-    minValue?: number;
-    user_id?: string;
+export interface ICounter {
+    counter_id: string;
+    counter_name: string;
+    logo: string;
+    description: string;
+    baseValue: number;
+    maxValue: number | null;
+    minValue: number | null;
+    user_id: string;
 }
 
-export const counterSchema = new Schema<counter>({
-    id: { type: String, required: true, unique: true },
-    name: { type: String, required: true },
+export class counterDto {
+    counter_id: string;
+    counter_name: string;
+    logo: string;
+    description: string;
+    baseValue: number;
+    maxValue: number | null;
+    minValue: number | null;
+    user_id: string | "admin";
+}
+
+export const CounterSchema = new Schema<ICounter>({
+    counter_id: { type: String, required: true, unique: true },
+    counter_name: { type: String, required: true },
     logo: { type: String, required: false },
     description: { type: String, required: false },
-    baseValue: { type: Number, required: false },
+    baseValue: { type: Number, required: true },
     maxValue: { type: Number, required: false },
     minValue: { type: Number, required: false },
-    user_id: { type: String, required: false },
+    user_id: { type: String, required: true },
 });
 
-export const counterModel = model<counter>('Counter', counterSchema);
+export const CounterModel = model<ICounter>('Counter', CounterSchema);
 

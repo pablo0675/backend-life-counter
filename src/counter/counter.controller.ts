@@ -1,7 +1,7 @@
 import {Body, Controller, Delete, Get, Param, Post, Query} from '@nestjs/common';
 import {ApiBody, ApiOkResponse, ApiTags} from "@nestjs/swagger";
 import {CounterService} from "./counter.service";
-import {counter} from "../models/counters.model";
+import {ICounter, counterDto} from "../models/counters.model";
 
 @ApiTags('counter')
 @Controller('counter')
@@ -12,7 +12,7 @@ export class CounterController {
 
     @ApiOkResponse({
         description: 'success',
-        type: counter,
+        type: counterDto,
     })
 
     @ApiBody({description: 'counter_id', type: String})
@@ -20,20 +20,20 @@ export class CounterController {
     @Get('get_counter')
     async getCounter(
         @Query() counter_id: string,
-    ) : Promise<counter> {
+    ) : Promise<ICounter> {
         return await this.counterService.getCounter(counter_id);
     }
 
     @ApiOkResponse({
         description: 'success',
-        type: counter,
+        type: counterDto,
     })
 
     @ApiBody({description: 'user_id', type: String})
     @Get('get_all_counters')
     async getAllCounters(
         @Query() user_id: string,
-    ) : Promise<counter[]> {
+    ) : Promise<ICounter[]> {
         console.log(user_id);
         return await this.counterService.getAllCounters(user_id);
     }
@@ -56,7 +56,7 @@ export class CounterController {
 
     @ApiOkResponse({
         description: 'success',
-        type: counter,
+        type: counterDto,
     })
 
     @ApiBody({
@@ -66,9 +66,6 @@ export class CounterController {
                 counter: {
                     type: 'object',
                     properties: {
-                        id: {
-                            type: 'string',
-                        },
                         name: {
                             type: 'string',
                         },
@@ -87,29 +84,24 @@ export class CounterController {
                         minValue: {
                             type: 'number',
                         },
-                        user_id: {
-                            type: 'string',
-                        },
                     },
                 },
                 user_id: {
                     type: 'string',
-                },
-            },
+                }
+            }
         }
     })
 
     @Post('create_counter')
-    async createCounter(
-        @Body() counter: counter,
-        @Body() user_id: string,
-    ) : Promise<counter> {
-        return await this.counterService.createCounter(counter, user_id);
+    async createCounter(@Body() body: { counter: ICounter, user_id: string }) : Promise<void> {
+        body.counter.user_id = body.user_id.toString();
+        return await this.counterService.createCounter(body.counter);
     }
 
     @ApiOkResponse({
         description: 'success',
-        type: counter,
+        type: counterDto,
     })
 
     @ApiBody({
@@ -153,16 +145,15 @@ export class CounterController {
     })
 
     @Post('update_counter')
-    async updateCounter(
-        @Body() counter_id: string,
-        @Body() counter: counter,
-    ) : Promise<counter> {
-        return await this.counterService.updateCounter(counter_id, counter);
+    async updateCounter(@Body() body:{counter_id: string, Counter: ICounter}
+    )
+        : Promise<ICounter> {
+        return await this.counterService.updateCounter(body.counter_id, body.Counter);
     }
 
     @ApiOkResponse({
         description: 'success',
-        type: counter,
+        type: counterDto,
     })
 
     @ApiBody({
@@ -207,9 +198,8 @@ export class CounterController {
 
     @Post('create_counter_admin')
     async createCounterAdmin(
-        @Body() counter_id: string,
-        @Body() counter: counter,
-    ) : Promise<counter> {
-        return await this.counterService.createCounterAdmin(counter_id, counter);
+        @Body() Counter: ICounter,
+    ) : Promise<void> {
+        return await this.counterService.createCounterAdmin(Counter);
     }
 }

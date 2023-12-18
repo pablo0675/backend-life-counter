@@ -1,53 +1,60 @@
 import {Injectable} from '@nestjs/common';
-import {counter} from "../models/counters.model";
+import {ICounter} from "../models/counters.model";
 import {InjectModel} from "@nestjs/mongoose";
 import {Model} from "mongoose";
 import {v4 as uuidv4} from 'uuid';
+import { CounterModel} from "../models/counters.model";
 
 
 @Injectable()
 export class CounterService {
 
     constructor(
-        @InjectModel('counter') private readonly counterModel: Model<counter>,
+        @InjectModel('Counter') private readonly CounterModel: Model<ICounter>,
     ) {
     }
 
-    async getCounter( counter_id: string) : Promise<counter>
+    async getCounter( counter_id: string) : Promise<ICounter>
     {
-        const counter = await this.counterModel.findOne({counter_id: counter_id.toString()}).exec();
+        const counter = await this.CounterModel.findOne({counter_id: counter_id.toString()}).exec();
         if (!counter) {
             throw new Error('Counter not found');
         }
         return counter;
     }
 
-    async getAllCounters( user_id: string) : Promise<counter[]>
+    async getAllCounters( user_id: string) : Promise<ICounter[]>
     {
-        return await this.counterModel.find({$or: [{user_id: user_id.toString()}, {user_id: "admin"}]}).exec();
+        return await this.CounterModel.find({$or: [{user_id: user_id.toString()}, {user_id: "admin"}]}).exec();
     }
 
     async deleteCounter( counter_id: string) : Promise<void>
     {
-        const counter = await this.counterModel.findOne({counter_id: counter_id.toString()}).exec();
+        const counter = await this.CounterModel.findOne({counter_id: counter_id.toString()}).exec();
         if (!counter) {
             throw new Error('Counter not found');
         }
-        await this.counterModel.deleteOne({counter_id: counter_id.toString()}).exec();
+        await this.CounterModel.deleteOne({counter_id: counter_id.toString()}).exec();
     }
 
-    async createCounter( counter: counter, user_id: string) : Promise<counter>
+    async createCounter(counterData: ICounter) : Promise<void>
     {
-        counter.id = uuidv4();
-        const newCounter = new this.counterModel(counter);
-        console.log(newCounter);
-        newCounter.user_id = user_id.toString();
-        return await newCounter.save();
+        const newCounter = new this.CounterModel({
+            counter_id: uuidv4(),
+            user_id: counterData.user_id,
+            counter_name: counterData.counter_name,
+            baseValue: counterData.baseValue,
+            maxValue: counterData.maxValue,
+            logo: counterData.logo,
+            minValue: counterData.minValue,
+            description: counterData.description,
+        });
+        await newCounter.save();
     }
 
-    async updateCounter( counter_id: string, counter: counter) : Promise<counter>
+    async updateCounter( counter_id: string, counter: ICounter) : Promise<ICounter>
     {
-        let oldCounter = await this.counterModel.findOne({counter_id: counter_id}).exec();
+        let oldCounter = await this.CounterModel.findOne({counter_id: counter_id}).exec();
         if (!oldCounter) {
             throw new Error('Counter not found');
         }
@@ -59,10 +66,18 @@ export class CounterService {
         return await oldCounter.save();
     }
 
-    async createCounterAdmin( counter_id: string, counter: counter) : Promise<counter>
+    async createCounterAdmin( counterData: ICounter) : Promise<void>
     {
-        const newCounter = new this.counterModel(counter);
-        newCounter.user_id = "admin";
-        return await newCounter.save();
+        const newCounter = new this.CounterModel({
+            counter_id: uuidv4(),
+            user_id: "admin",
+            counter_name: counterData.counter_name,
+            baseValue: counterData.baseValue,
+            maxValue: counterData.maxValue,
+            logo: counterData.logo,
+            minValue: counterData.minValue,
+            description: counterData.description,
+        });
+        await newCounter.save();
     }
 }

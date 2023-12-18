@@ -4,7 +4,6 @@ import {configurationModel, configurationSchema} from "../models/configurationMo
 import {ConfigurationController} from "./configurationController";
 import {ConfigurationService} from "./configuration.service";
 import {AuthModule} from "../auth/auth.module";
-import {AuthService} from "../auth/auth.service";
 
 @Module({
     imports: [
