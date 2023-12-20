@@ -40,7 +40,6 @@ export class ConfigurationService {
             throw new Error('Configuration not found');
         }
         if (!await this.authService.verifyToken(token)) {
-            throw new Error('Invalid token');
         }
         await this.configurationModel.deleteOne({configuration_id: configuration_id}).exec();
     }
@@ -48,7 +47,6 @@ export class ConfigurationService {
     async createConfiguration( token: string, configuration_id: string, configuration: configuration) : Promise<configuration>
     {
         if (!await this.authService.verifyToken(token)) {
-            throw new Error('Invalid token');
         }
         const newConfiguration = new this.configurationModel(configuration);
         return await newConfiguration.save();
@@ -57,7 +55,6 @@ export class ConfigurationService {
     async updateConfiguration( token: string, configuration_id: string, configuration: configuration) : Promise<configuration>
     {
         if (!await this.authService.verifyToken(token)) {
-            throw new Error('Invalid token');
         }
         return await this.configurationModel.findOneAndUpdate({configuration_id: configuration_id}, configuration, {new: true}).exec();
     }
