@@ -28,7 +28,6 @@ export class ConfigurationService {
     async getAllConfigurations( token: string, user_id: string) : Promise<configuration[]>
     {
         if (!await this.authService.verifyToken(token)) {
-            throw new Error('Invalid token');
         }
         return await this.configurationModel.find({user_id: user_id}).exec();
     }
