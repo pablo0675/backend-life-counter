@@ -41,8 +41,8 @@ export const configurationSchema = new Schema<configuration>({
     },
     counters: {
         type: [{
-            id: { type: String, required: true },
-            name: { type: String, required: true },
+            counter_id: { type: String, required: true },
+            counter_name: { type: String, required: true },
             logo: { type: String, required: false },
             description: { type: String, required: false },
             baseValue: { type: Number, required: false },

@@ -28,6 +28,7 @@ export class ConfigurationService {
     async getAllConfigurations( token: string, user_id: string) : Promise<configuration[]>
     {
         if (!await this.authService.verifyToken(token)) {
+            throw new Error('Invalid token');
         }
         return await this.configurationModel.find({user_id: user_id}).exec();
     }
@@ -46,7 +47,10 @@ export class ConfigurationService {
     async createConfiguration( token: string, configuration_id: string, configuration: configuration) : Promise<configuration>
     {
         if (!await this.authService.verifyToken(token)) {
+            throw new Error('Invalid token');
         }
+        configuration.id = configuration_id;
+        console.log(configuration.counters[0].counter_name);
         const newConfiguration = new this.configurationModel(configuration);
         return await newConfiguration.save();
     }
@@ -54,6 +58,7 @@ export class ConfigurationService {
     async updateConfiguration( token: string, configuration_id: string, configuration: configuration) : Promise<configuration>
     {
         if (!await this.authService.verifyToken(token)) {
+            throw new Error('Invalid token');
         }
         return await this.configurationModel.findOneAndUpdate({configuration_id: configuration_id}, configuration, {new: true}).exec();
     }
