@@ -50,7 +50,7 @@ export class ConfigurationService {
             throw new Error('Invalid token');
         }
         configuration.id = configuration_id;
-        console.log(configuration.counters[0].counter_name);
+        console.log(configuration.counters[0].user_id);
         const newConfiguration = new this.configurationModel(configuration);
         return await newConfiguration.save();
     }
