@@ -31,7 +31,6 @@ export class RegisterDto extends LoginRegisterDto {
     @ApiProperty({
         description: 'Password',
     })
-    @IsStrongPassword({ minLength: 8, minLowercase: 1, minUppercase: 1, minNumbers: 1})
     @IsNotEmpty()
     @IsString()
     password!: string;
