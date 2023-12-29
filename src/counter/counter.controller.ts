@@ -148,7 +148,7 @@ export class CounterController {
     async updateCounter(@Body() body:{counter_id: string, counter: ICounter}
     )
         : Promise<ICounter> {
-        console.log(body);
+        console.log(body.counter_id, body.counter.counter_name);
         return await this.counterService.updateCounter(body.counter_id, body.counter);
     }
 
