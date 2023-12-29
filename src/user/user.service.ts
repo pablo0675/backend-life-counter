@@ -31,20 +31,21 @@ export class UserService {
         )
     }
 
-    async updateUser(user_id: string, user: IUser): Promise<IUser> {
+    async updateUser(uid: string, user: IUser): Promise<IUser> {
         try {
+
             const exists = await this.userModel.findOne({email: user.email}).exec();
-            if (exists && exists.uid !== user_id) {
+            if (exists && exists.uid !== uid) {
                 throw new Error('Email already in use');
             }
-            const oldUser = await this.userModel.findOne({uid: user_id}).exec();
+            const oldUser = await this.userModel.findOne({uid: uid}).exec();
             if (!oldUser) {
                 throw new Error('User not found');
             }
-            if (!await verify(oldUser.password, user.password)) {
+            if (user.password && !await verify(oldUser.password, user.password)) {
                 user.password = await hash(user.password);
             }
-            const updatedUser = await this.userModel.findOneAndUpdate({uid: user_id}, user, {new: true}).exec();
+            const updatedUser = await this.userModel.findOneAndUpdate({uid: uid}, user, {new: true}).exec();
             return updatedUser;
         } catch (e) {
             throw new Error(e);

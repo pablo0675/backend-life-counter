@@ -156,7 +156,8 @@ export class UserController {
     }
 
     @Post('updateUser')
-    async updateUser(@Body() user: IUser) {
+    async updateUser(@Body() body) {
+        const user = body.user as IUser;
         return this.userService.updateUser(user.uid, user);
     }
 }
