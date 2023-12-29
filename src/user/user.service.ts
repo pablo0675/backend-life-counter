@@ -33,6 +33,10 @@ export class UserService {
 
     async updateUser(user_id: string, user: IUser): Promise<IUser> {
         try {
+            const exists = await this.userModel.findOne({email: user.email}).exec();
+            if (exists && exists.uid !== user_id) {
+                throw new Error('Email already in use');
+            }
             const oldUser = await this.userModel.findOne({uid: user_id}).exec();
             if (!oldUser) {
                 throw new Error('User not found');
