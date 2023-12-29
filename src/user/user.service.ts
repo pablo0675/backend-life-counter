@@ -7,6 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { TaskEither, tryCatch } from 'fp-ts/lib/TaskEither';
 import { pipe } from 'fp-ts/function/';
 import {CreateUserDto} from "./dto/user.dto";
+import {hash, verify} from "argon2";
 
 
 @Injectable()
@@ -30,10 +31,20 @@ export class UserService {
         )
     }
 
-    updateUser(uid: string, user: IUser): TaskEither<Error, IUser> {
-        return pipe(
-            tryCatch(() => this.userModel.findOneAndUpdate({uid: uid}, user).exec(), (reason) => new Error(String(reason)))
-        )
+    async updateUser(user_id: string, user: IUser): Promise<IUser> {
+        try {
+            const oldUser = await this.userModel.findOne({uid: user_id}).exec();
+            if (!oldUser) {
+                throw new Error('User not found');
+            }
+            if (!await verify(oldUser.password, user.password)) {
+                user.password = await hash(user.password);
+            }
+            const updatedUser = await this.userModel.findOneAndUpdate({uid: user_id}, user, {new: true}).exec();
+            return updatedUser;
+        } catch (e) {
+            throw new Error(e);
+        }
     }
 
     deleteUser(uid: string): TaskEither<Error, IUser> {

@@ -88,10 +88,10 @@ export class UserController {
     async getUser(@Query('uid') uid: string) {
         const result = await this.userService.findUserById(uid)
         const returnclass = {
-            uid: "",
             email: "",
             username: "",
             picture: "",
+            name: "",
         }
 
         return pipe(
@@ -101,7 +101,6 @@ export class UserController {
                     throw new HttpException(error.message, 500);
                 },
                 (user) => {
-                    returnclass.uid = user.uid;
                     returnclass.email = user.email;
                     returnclass.username = user.username;
                     returnclass.picture = user.picture;
@@ -154,5 +153,10 @@ export class UserController {
     @Get('isUserAdmin')
     async isUserAdmin(@Query('uid') uid: string) {
         return await this.userService.isUserAdmin(uid);
+    }
+
+    @Post('updateUser')
+    async updateUser(@Body() user: IUser) {
+        return this.userService.updateUser(user.uid, user);
     }
 }
