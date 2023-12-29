@@ -145,10 +145,10 @@ export class CounterController {
     })
 
     @Post('update_counter')
-    async updateCounter(@Body() body:{counter_id: string, Counter: ICounter}
+    async updateCounter(@Body() body:{counter_id: string, counter: ICounter}
     )
         : Promise<ICounter> {
-        return await this.counterService.updateCounter(body.counter_id, body.Counter);
+        return await this.counterService.updateCounter(body.counter_id, body.counter);
     }
 
     @ApiOkResponse({

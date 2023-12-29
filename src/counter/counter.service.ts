@@ -55,6 +55,7 @@ export class CounterService {
     async updateCounter( counter_id: string, counter: ICounter) : Promise<ICounter>
     {
         let oldCounter = await this.CounterModel.findOne({counter_id: counter_id}).exec();
+
         if (!oldCounter) {
             throw new Error('Counter not found');
         }
