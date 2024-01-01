@@ -37,6 +37,7 @@ export class ConfigurationController {
     @Post('update_configuration')
     async updateConfiguration( @Body () body:{token: string, configuration_id: string, configuration: configuration}
     ) : Promise<configuration> {
+        console.log("body", body.configuration);
         return await this.configurationService.updateConfiguration(body.token, body.configuration_id, body.configuration);
     }
 }

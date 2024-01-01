@@ -59,6 +59,19 @@ export class ConfigurationService {
         if (!await this.authService.verifyToken(token)) {
             throw new Error('Invalid token');
         }
-        return await this.configurationModel.findOneAndUpdate({configuration_id: configuration_id}, configuration, {new: true}).exec();
+        try {
+            const oldConfiguration = await this.configurationModel.findOne({configuration_id: configuration_id}).exec();
+            if (!oldConfiguration) {
+                throw new Error('Configuration not found');
+            }
+            for (const key in configuration) {
+                if (configuration.hasOwnProperty(key)) {
+                    oldConfiguration[key] = configuration[key];
+                }
+            }
+            return await oldConfiguration.save();
+        } catch (e) {
+            throw new Error(e);
+        }
     }
 }
