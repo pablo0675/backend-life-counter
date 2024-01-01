@@ -60,7 +60,7 @@ export class ConfigurationService {
             throw new Error('Invalid token');
         }
         try {
-            const oldConfiguration = await this.configurationModel.findOne({configuration_id: configuration_id}).exec();
+            const oldConfiguration = await this.configurationModel.findOne({id: configuration_id}).exec();
             if (!oldConfiguration) {
                 throw new Error('Configuration not found');
             }
