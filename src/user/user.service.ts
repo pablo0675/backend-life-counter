@@ -33,11 +33,6 @@ export class UserService {
 
     async updateUser(uid: string, user: IUser): Promise<IUser> {
         try {
-
-            const exists = await this.userModel.findOne({email: user.email}).exec();
-            if (exists && exists.uid !== uid) {
-                throw new Error('Email already in use');
-            }
             const oldUser = await this.userModel.findOne({uid: uid}).exec();
             if (!oldUser) {
                 throw new Error('User not found');
@@ -75,6 +70,7 @@ export class UserService {
 
     async isUserAdmin(uid: string) : Promise<boolean> {
         const user = await this.userModel.findOne({uid}).exec();
+        console.log(user);
         return user.is_admin;
     }
 }
